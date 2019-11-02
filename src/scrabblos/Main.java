@@ -37,11 +37,11 @@ public class Main {
 		 
 		Client c = new Client();
 		ArrayList<String> LetterBag = c.register(socket);
-		c.inject_Letter(socket, LetterBag, "", bw);
+		c.inject_Letter(socket, LetterBag, bw);
 		System.out.println("inject_Letter : ");
-		c.inject_Letter(socket,LetterBag,"",bw);
+		c.inject_Letter(socket,LetterBag,bw);
 		System.out.println("inject_Letter : " );
-		c.inject_Letter(socket,LetterBag,"",bw);
+		c.inject_Letter(socket,LetterBag,bw);
 		System.out.println("inject_Letter : " );
         
 		LetterPool lp = CommonOperations.get_full_letterpool(socket, bw);
@@ -67,6 +67,8 @@ public class Main {
 		po1.inject_word(socket,w,bw);
 		WordPool wp = CommonOperations.get_full_wordpool(socket, bw);
 		System.out.println("Voila ce que l'on a recu" + wp.getWords());
+		c.recive_word(socket,bw);
+		System.out.println("je sauvgarde ce mot " + c.getChaine());
 		//}
 //		WordPool wordpool = CommonOperations.get_full_wordpool(socket,bw);
 //		DiffWordPool dwordpool = CommonOperations.get_wordpool_since(socket,bw,0);

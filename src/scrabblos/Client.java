@@ -28,6 +28,24 @@ public class Client {
 	private static Socket socket;
 	private static String pk;
 	private static KeyPair kp;
+	private static Word chaine;
+	
+	public static Word getChaine() {
+		return chaine;
+	}
+	public static void recive_word(Socket s, BufferedWriter bw) throws JSONException, IOException {
+		ArrayList<Word> words = CommonOperations.get_full_wordpool(s, bw).getWords();
+		if(words.size()==1) {
+			chaine = words.get(0);
+		}
+		System.out.println("je recois ca " + words);
+		Word w = words.get(words.size()-1); //le dernier mot dansle wordpool
+		System.out.println("score de ce que j'ai deja " + Utils.score(w));
+		System.out.println("score de ce que j'ai deja " + Utils.score(Utils.word_with_best_score(words)));
+		if (Utils.score(w) > Utils.score(Utils.word_with_best_score(words))) {
+			chaine = w;
+		}
+	}
 	
 	public static ArrayList<String> register(Socket socket) throws IOException, JSONException, NoSuchAlgorithmException, NoSuchProviderException {
 		
@@ -65,8 +83,12 @@ public class Client {
 		return letterbag;
 	}
 	
-	public static Letter choose_Letter(ArrayList<String> LetterBag, String hash) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, IOException {
+	public static Letter choose_Letter(Socket s, ArrayList<String> LetterBag,BufferedWriter bw) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, IOException {
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		String hash = "";
+		//if (CommonOperations.get_full_wordpool(s, bw).getWords().size()>0) {
+			//hash = ;
+		//}
 		Collections.shuffle(LetterBag);
 		String letter = LetterBag.get(0);
 		String signature = Utils.bytesToHex(Utils.signature2(letter,digest.digest((hash).getBytes()), 0, kp));
@@ -75,10 +97,9 @@ public class Client {
 		return new Letter(letter, period, head, pk, signature);
 	}
 	
-	public static void inject_Letter(Socket s, ArrayList<String> LetterBag,String hash,BufferedWriter bw) throws IOException, JSONException, InvalidKeyException, NoSuchAlgorithmException, SignatureException {
+	public static void inject_Letter(Socket s, ArrayList<String> LetterBag,BufferedWriter bw) throws IOException, JSONException, InvalidKeyException, NoSuchAlgorithmException, SignatureException {
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
-		
-		Letter l = choose_Letter(LetterBag,hash);
+		Letter l = choose_Letter(s,LetterBag,bw);
 		JSONObject json = new JSONObject();
 		json.put("letter", l.getLetter());
 		json.put("author",l.getAuthor());

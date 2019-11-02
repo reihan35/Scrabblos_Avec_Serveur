@@ -49,6 +49,20 @@ public class Utils {
 		return ED25519.sign(kp,hashf);
 	}
 	
+	public static int score(Word w) {
+		return w.getWord().size(); //A changer
+	}
+	
+	public static Word word_with_best_score(ArrayList<Word> wp) {
+		Word max = wp.get(0);
+		for (Word w : wp){
+			if (score(w) > score(max)){
+				max = w;
+			}
+		}
+		return max;
+	}
+	
 	public static byte[] signature2Poli(Word w,byte[] hash,KeyPair kp) throws NoSuchAlgorithmException, IOException, InvalidKeyException, SignatureException {
 		//Faut rajouter une condition comme quoi si le wordpool est vide on passe ici
 		
