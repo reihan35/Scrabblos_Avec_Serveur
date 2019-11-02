@@ -68,7 +68,15 @@ public class Main {
 		WordPool wp = CommonOperations.get_full_wordpool(socket, bw);
 		System.out.println("Voila ce que l'on a recu" + wp.getWords());
 		c.recive_word(socket,bw);
+		po1.recive_word(socket,bw);
 		System.out.println("je sauvgarde ce mot " + c.getChaine());
+		c.inject_Letter(socket, LetterBag, bw);
+		CommonOperations.get_full_letterpool(socket, bw);
+		po1.inject_word(socket, w, bw);
+		WordPool wp2 = CommonOperations.get_full_wordpool(socket, bw);
+		System.out.println("Voila ce que l'on a recu 2 " + wp2.getWords());
+		System.out.println(Utils.authors_score(wp2.getWords()));
+		
 		//}
 //		WordPool wordpool = CommonOperations.get_full_wordpool(socket,bw);
 //		DiffWordPool dwordpool = CommonOperations.get_wordpool_since(socket,bw,0);

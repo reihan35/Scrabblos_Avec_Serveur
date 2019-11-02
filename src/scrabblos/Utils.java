@@ -1,6 +1,7 @@
 package scrabblos;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.FileReader;
@@ -13,6 +14,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 
@@ -26,6 +29,18 @@ public class Utils {
         }
         return sb.toString();
     }
+	
+	public static HashMap<String, Integer> authors_score(ArrayList<Word> words) {
+		Word w = word_with_best_score(words);
+		HashMap<String, Integer> scores = new HashMap<String, Integer>();
+		for(Letter l : w.getWord()) {
+			if (scores.get(l.getAuthor()) == null) {
+				scores.put(l.getAuthor(),0);
+			}
+			scores.put(l.getAuthor(),scores.get(l.getAuthor())+1);
+		}
+		return scores;
+	}
 	
 	public static byte[] longToBytes(long x) {
 	    ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
@@ -61,6 +76,18 @@ public class Utils {
 			}
 		}
 		return max;
+	}
+	
+	public static byte[] hashLetter(ArrayList<Letter> w) throws IOException {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		for(int i = 0; i<w.size(); i++) {
+			outputStream.write(w.get(i).getLetter().getBytes());
+			outputStream.write(Utils.longToBytes(w.get(i).getPeriod()));
+			outputStream.write(hexStringToByteArray(w.get(i).getHead()));
+			outputStream.write(hexStringToByteArray(w.get(i).getAuthor()));
+			outputStream.write(hexStringToByteArray(w.get(i).getSignature()));
+		}
+		return outputStream.toByteArray();
 	}
 	
 	public static byte[] signature2Poli(Word w,byte[] hash,KeyPair kp) throws NoSuchAlgorithmException, IOException, InvalidKeyException, SignatureException {

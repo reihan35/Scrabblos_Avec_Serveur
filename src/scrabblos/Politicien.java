@@ -27,6 +27,8 @@ public class Politicien {
 	private static Socket socket;
 	private static String pk;
 	private static KeyPair kp;
+	private static Word chaine;
+ 
 	
 	/*public Politicien(Socket socket) {
 		this.socket = socket;
@@ -47,6 +49,20 @@ public class Politicien {
 	public static String getSign() throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, IOException {
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
 		return Utils.bytesToHex(Utils.signature2("a",digest.digest(("").getBytes()), 0, kp));
+	}
+	
+	public static void recive_word(Socket s, BufferedWriter bw) throws JSONException, IOException {
+		ArrayList<Word> words = CommonOperations.get_full_wordpool(s, bw).getWords();
+		if(words.size()==1) {
+			chaine = words.get(0);
+		}
+		System.out.println("je recois ca " + words);
+		Word w = words.get(words.size()-1); //le dernier mot dansle wordpool
+		System.out.println("score de ce que j'ai deja " + Utils.score(w));
+		System.out.println("score de ce que j'ai deja " + Utils.score(Utils.word_with_best_score(words)));
+		if (Utils.score(w) > Utils.score(Utils.word_with_best_score(words))) {
+			chaine = w;
+		}
 	}
 
 	
@@ -93,11 +109,14 @@ public class Politicien {
 		for(Letter l:letters) {
 			wordletters.add(l);		
 		}
-
+		String hash = "";
+		if (chaine!=null) {
+			hash = Utils.bytesToHex(Utils.hashLetter(chaine.getWord()));
+		}
 		wordAct.setWord(wordletters);
-	    wordAct.setHead(Utils.bytesToHex(digest.digest(("").getBytes())));
+	    wordAct.setHead(Utils.bytesToHex(digest.digest((hash).getBytes())));
 	    wordAct.setPoliticien(pk);
-		String signture =  Utils.bytesToHex(Utils.signature2Poli(wordAct,digest.digest(("").getBytes()), kp));
+		String signture =  Utils.bytesToHex(Utils.signature2Poli(wordAct,digest.digest((hash).getBytes()), kp));
 	    wordAct.setSignature(signture);
 
        return wordAct;
