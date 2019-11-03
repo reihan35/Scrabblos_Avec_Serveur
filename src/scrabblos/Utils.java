@@ -14,6 +14,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -30,16 +31,31 @@ public class Utils {
         return sb.toString();
     }
 	
-	public static HashMap<String, Integer> authors_score(ArrayList<Word> words) {
-		Word w = word_with_best_score(words);
-		HashMap<String, Integer> scores = new HashMap<String, Integer>();
+	public static HashMap<String, Integer> authors_score(HashMap<Word,Integer> scores,ArrayList<Block> blocks) {
+		Word w = word_with_best_score(scores);
+		HashMap<String, Integer> scores2 = new HashMap<String, Integer>();
+		System.out.println("je suis le mot MOI MOI MOI" + w);
+		
 		for(Letter l : w.getWord()) {
-			if (scores.get(l.getAuthor()) == null) {
-				scores.put(l.getAuthor(),0);
+			System.out.println("je viens ici");
+			if (scores2.get(l.getAuthor()) == null) {
+				scores2.put(l.getAuthor(),0);
 			}
-			scores.put(l.getAuthor(),scores.get(l.getAuthor())+1);
+			scores2.put(l.getAuthor(),scores2.get(l.getAuthor())+1);
 		}
-		return scores;
+
+		while(find_prev(w,blocks)!=null) {
+			w = find_prev(w,blocks);
+			for(Letter l : w.getWord()) {
+				System.out.println("je viens ici");
+				if (scores2.get(l.getAuthor()) == null) {
+					scores2.put(l.getAuthor(),0);
+				}
+				scores2.put(l.getAuthor(),scores2.get(l.getAuthor())+1);
+			}
+
+		}
+		return scores2;
 	}
 	
 	public static byte[] longToBytes(long x) {
@@ -64,18 +80,37 @@ public class Utils {
 		return ED25519.sign(kp,hashf);
 	}
 	
-	public static int score(Word w) {
-		return w.getWord().size(); //A changer
-	}
-	
-	public static Word word_with_best_score(ArrayList<Word> wp) {
-		Word max = wp.get(0);
-		for (Word w : wp){
-			if (score(w) > score(max)){
-				max = w;
+	public static Word find_prev(Word w, ArrayList<Block> blocks) {
+		for(Block b : blocks) {
+			if (b.getCurrent() == w) {
+				return b.getBefor();
 			}
 		}
-		return max;
+		return null;
+	}
+	
+	
+	
+	public static int score(Word w, ArrayList<Block> blocks) {
+		int score = w.getWord().size();
+		while(find_prev(w,blocks)!=null) {
+			w = find_prev(w,blocks);
+			score = score + w.getWord().size();
+		}
+		return score;
+	}
+	
+	public static HashMap<Word, Integer> score_each_word(ArrayList<Word> wp,ArrayList<Block> blocks) {
+		HashMap<Word, Integer> hm = new HashMap<Word, Integer>();
+		for (Word w : wp){
+			hm.put(w, score(w,blocks));
+		}
+		System.out.println("score de chaque mot " + hm);
+		return hm;
+	}
+	
+	public static Word word_with_best_score(HashMap<Word, Integer> scores) {
+		return Collections.max(scores.entrySet(), (a, b) -> a.getValue() - b.getValue()).getKey();
 	}
 	
 	public static byte[] hashLetter(ArrayList<Letter> w) throws IOException {

@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 
 public class Client {
@@ -28,22 +29,30 @@ public class Client {
 	private static Socket socket;
 	private static String pk;
 	private static KeyPair kp;
-	private static Word chaine;
+	private static Block current_block;
+	private static ArrayList<Block> blocks = new ArrayList<Block>();
 	
-	public static Word getChaine() {
-		return chaine;
+	public static Block getCurrentBlokc() {
+		return current_block;
 	}
+	public static ArrayList<Block> get_blocks(){
+		return blocks;
+	}
+	
 	public static void recive_word(Socket s, BufferedWriter bw) throws JSONException, IOException {
 		ArrayList<Word> words = CommonOperations.get_full_wordpool(s, bw).getWords();
 		if(words.size()==1) {
-			chaine = words.get(0);
+			current_block= new Block(words.get(0),null);
+			blocks.add(current_block);
 		}
 		System.out.println("je recois ca " + words);
 		Word w = words.get(words.size()-1); //le dernier mot dansle wordpool
-		System.out.println("score de ce que j'ai deja " + Utils.score(w));
-		System.out.println("score de ce que j'ai deja " + Utils.score(Utils.word_with_best_score(words)));
-		if (Utils.score(w) > Utils.score(Utils.word_with_best_score(words))) {
-			chaine = w;
+		//System.out.println("score de ce que j'ai deja " + Utils.score(w));
+		//System.out.println("score de ce que j'ai deja " + Utils.score(Utils.word_with_best_score(words)));
+		if (w != (Utils.word_with_best_score(Utils.score_each_word(words, blocks)))) {
+			current_block.setBefor(current_block.getCurrent());
+			current_block.setCurrent(w);
+			blocks.add(current_block);
 		}
 	}
 	
@@ -86,8 +95,8 @@ public class Client {
 	public static Letter choose_Letter(Socket s, ArrayList<String> LetterBag,BufferedWriter bw) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException, IOException {
 		MessageDigest digest = MessageDigest.getInstance("SHA-256");
 		String hash = "";
-		if (chaine!=null) {
-			hash = Utils.bytesToHex(Utils.hashLetter(chaine.getWord()));
+		if (current_block!=null && current_block.getBefor()!=null) {
+			hash = Utils.bytesToHex(Utils.hashLetter(current_block.getBefor().getWord()));
 		}
 		Collections.shuffle(LetterBag);
 		String letter = LetterBag.get(0);

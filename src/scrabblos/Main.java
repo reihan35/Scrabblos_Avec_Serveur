@@ -48,12 +48,6 @@ public class Main {
 		System.out.println("LetterPool : " +lp.getLetters());
 		ArrayList<String> dictionaire = Utils.makeDictionnary("src/dict_dict_100000_1_10.txt");
 		
-		// CREATION DE LA CLE PUBLIQUE
-		/*ED25519 ed = new ED25519();
-		KeyPair kp = ed.generateKeys();
-		EdDSAPublicKey public_k = (EdDSAPublicKey) kp.getPublic();
-		String pk = Utils.bytesToHex(public_k.getAbyte());*/
-		
 		
 		Politicien po1 = new Politicien();
 		po1.register(socket);
@@ -61,30 +55,20 @@ public class Main {
 			
 		Word w = po1.make_word(lp2);
 		
-		/*String wordDest = po1.findWordDestinaire(dictionaire, wordAct);
-		wordAct = po1.make_word(lp2, wordAct);*/
-		//if(po1.isWord(dictionaire, wordAct)) {
 		po1.inject_word(socket,w,bw);
 		WordPool wp = CommonOperations.get_full_wordpool(socket, bw);
 		System.out.println("Voila ce que l'on a recu" + wp.getWords());
 		c.recive_word(socket,bw);
 		po1.recive_word(socket,bw);
-		System.out.println("je sauvgarde ce mot " + c.getChaine());
+		System.out.println("je sauvgarde ce mot " + c.getCurrentBlokc().getCurrent());
+		//System.out.println("Et son mot d'avant est " + c.getCurrentBlokc().getBefor());
 		c.inject_Letter(socket, LetterBag, bw);
 		CommonOperations.get_full_letterpool(socket, bw);
 		po1.inject_word(socket, w, bw);
 		WordPool wp2 = CommonOperations.get_full_wordpool(socket, bw);
 		System.out.println("Voila ce que l'on a recu 2 " + wp2.getWords());
-		System.out.println(Utils.authors_score(wp2.getWords()));
-		
-		//}
-//		WordPool wordpool = CommonOperations.get_full_wordpool(socket,bw);
-//		DiffWordPool dwordpool = CommonOperations.get_wordpool_since(socket,bw,0);
-//		ArrayList<Word> words= wordpool.getWords();
-//		//<Word> dwords= dwordpool.getWordpool().getWords();
-//		for(Word w :words) {
-//			System.out.println("get word: "+w.wordArray());
-//		}
+		System.out.println("ma liste de block est " + c.get_blocks());
+		System.out.println(Utils.authors_score(Utils.score_each_word(wp2.getWords(), c.get_blocks()),c.get_blocks()));
 
 	}
 
