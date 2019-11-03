@@ -66,19 +66,19 @@ public class CommonOperations {
 		String res = Utils.readAnswer(di);
 
 		// TRANSFORMATION DE LA REPONSE SOUS FORME DE LISTE DE LETTER
-		System.out.println("je suis res" + res);
+		//System.out.println("je suis res" + res);
 		Gson gson = new Gson();
 		
 		JSONObject j = new JSONObject(res);
-		System.out.println(j.toString());
+		//System.out.println(j.toString());
 		
 		JSONObject j2 = (JSONObject) j.get("full_letterpool");
-		System.out.println(j2);		
+		//System.out.println(j2);		
 		
 		JSONArray letters = j2.getJSONArray("letters");
 		long current_period = j2.getInt("current_period");
 		long next_period = j2.getInt("next_period");
-		System.out.println(letters.toString());
+		//System.out.println(letters.toString());
 		ArrayList<Letter> lettersA = new ArrayList<Letter>();
 		for (int i = 0; i < letters.length(); i++) {
 			String s = ((JSONArray) letters.get(i)).get(1).toString();
@@ -124,20 +124,20 @@ public class CommonOperations {
 		Gson gson = new Gson();
 		
 		JSONObject j = new JSONObject(res);
-		System.out.println(j.toString());
+		//System.out.println(j.toString());
 		
 		JSONObject j2 = (JSONObject) j.get("diff_letterpool");
-		System.out.println(j2);
+		//System.out.println(j2);
 		
 		JSONObject letterpool = (JSONObject) j2.get("letterpool");
 		long since = j2.getInt("since");
 		
-		System.out.println(letterpool);
+		//System.out.println(letterpool);
 		
 		JSONArray letters = letterpool.getJSONArray("letters");
 		long current_period = letterpool.getInt("current_period");
 		long next_period = letterpool.getInt("next_period");
-		System.out.println(letters.toString());
+		//System.out.println(letters.toString());
 		ArrayList<Letter> lettersA = new ArrayList<Letter>();
 		for (int i = 0; i < letters.length(); i++) {
 			String s = ((JSONArray) letters.get(i)).get(1).toString();
@@ -155,7 +155,8 @@ public class CommonOperations {
 		for (int i = a.length - 1; i >= 0; i--) {
 			bw.write((char) (a[i]));
 		}
-		System.out.println("{ \"listen\" : null }");
+		//
+		//System.out.println("{ \"listen\" : null }");
 		bw.write("{ \"get_full_wordpool\": null}");
 		bw.flush();
 		// RECUPERATION DE LA REPONSE SOUS FORME DE STRING
@@ -166,31 +167,31 @@ public class CommonOperations {
 		String res = Utils.readAnswer(di);
 		
 		// TRANSFORMATION DE LA REPONSE SOUS FORME DE LISTE DE LETTER
-		System.out.println("je suis res" + res);
+		//System.out.println("je suis res" + res);
 		Gson gson = new Gson();
 		
 		JSONObject j = new JSONObject(res);
-		System.out.println(j.toString());
+		//System.out.println(j.toString());
 		
 		JSONObject j2 = (JSONObject) j.get("full_wordpool");
-		System.out.println(j2);
+		//System.out.println(j2);
 						
 		JSONArray words = j2.getJSONArray("words");
 		long current_period = j2.getInt("current_period");
 		long next_period = j2.getInt("next_period");
 		
 		ArrayList<Word> wordsA = new ArrayList<Word>();
-		System.out.println("je suis words" + words.toString());
+		//System.out.println("je suis words" + words.toString());
 			
 			for(int i = 0; i<words.length();i++) {
 				JSONArray word2 = (JSONArray) words.get(i);
 				JSONObject w = (JSONObject) word2.get(1);
-				System.out.println(w.toString());
+				//System.out.println(w.toString());
 				String head = w.getString("head");
 				String politicien = w.getString("politician");
 				String signature = w.getString("signature");
 				JSONArray lettersInword = w.getJSONArray("word");
-				System.out.println("je suis la liste des mots : " + lettersInword);
+				//System.out.println("je suis la liste des mots : " + lettersInword);
 				ArrayList<Letter> lettersA = new ArrayList<Letter>();
 				for (int k = 0; k < lettersInword.length(); k++) {
 					String s = lettersInword.get(i).toString();
@@ -212,7 +213,7 @@ public class CommonOperations {
 		for (int i = a.length - 1; i >= 0; i--) {
 			bw.write((char) (a[i]));
 		}
-		System.out.println("{ \"listen\" : null }");
+		//System.out.println("{ \"listen\" : null }");
 		bw.write("{ \"get_wordpool_since\":" + period + "}");
 		bw.flush();
 		
@@ -225,19 +226,19 @@ public class CommonOperations {
 		String res = Utils.readAnswer(di);
 				
 		// TRANSFORMATION DE LA REPONSE SOUS FORME DE LISTE DE LETTER
-		System.out.println("je suis res" + res);
+		//System.out.println("je suis res" + res);
 		Gson gson = new Gson();
 		
 		JSONObject j = new JSONObject(res);
-		System.out.println(j.toString());
+		//System.out.println(j.toString());
 		
 		JSONObject j2 = (JSONObject) j.get("diff_wordpool");
-		System.out.println(j2);
+		//System.out.println(j2);
 		
 		JSONObject wordpool = (JSONObject) j2.get("wordpool");
 		long since = j2.getInt("period");
 		
-		System.out.println(wordpool);
+		//System.out.println(wordpool);
 		
 		JSONArray words = wordpool.getJSONArray("words");
 		long current_period = wordpool.getInt("current_period");

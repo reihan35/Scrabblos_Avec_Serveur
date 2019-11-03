@@ -34,10 +34,10 @@ public class Utils {
 	public static HashMap<String, Integer> authors_score(HashMap<Word,Integer> scores,ArrayList<Block> blocks) {
 		Word w = word_with_best_score(scores);
 		HashMap<String, Integer> scores2 = new HashMap<String, Integer>();
-		System.out.println("je suis le mot MOI MOI MOI" + w);
+		//System.out.println("je suis le mot MOI MOI MOI" + w);
 		
 		for(Letter l : w.getWord()) {
-			System.out.println("je viens ici");
+			//System.out.println("je viens ici");
 			if (scores2.get(l.getAuthor()) == null) {
 				scores2.put(l.getAuthor(),0);
 			}
@@ -47,7 +47,7 @@ public class Utils {
 		while(find_prev(w,blocks)!=null) {
 			w = find_prev(w,blocks);
 			for(Letter l : w.getWord()) {
-				System.out.println("je viens ici");
+				//System.out.println("je viens ici");
 				if (scores2.get(l.getAuthor()) == null) {
 					scores2.put(l.getAuthor(),0);
 				}
@@ -98,6 +98,9 @@ public class Utils {
 			score = score + w.getWord().size();
 		}
 		return score;
+	}
+	public static int scoreP(Politicien p) {
+		return score(p.getCurrentBlokc().getCurrent(),p.get_blocks());
 	}
 	
 	public static HashMap<Word, Integer> score_each_word(ArrayList<Word> wp,ArrayList<Block> blocks) {

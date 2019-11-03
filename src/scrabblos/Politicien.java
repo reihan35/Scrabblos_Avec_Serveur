@@ -53,7 +53,7 @@ public class Politicien {
 			Block current_block= new Block(words.get(0),null);
 			blocks.add(current_block);
 		}
-		System.out.println("je recois ca " + words);
+		//System.out.println("je recois ca " + words);
 		Word w = words.get(words.size()-1); //le dernier mot dansle wordpool
 		//System.out.println("score de ce que j'ai deja " + Utils.score(w));
 		//System.out.println("score de ce que j'ai deja " + Utils.score(Utils.word_with_best_score(words)));
@@ -92,7 +92,7 @@ public class Politicien {
 		DataInputStream di = new DataInputStream(is);
 		String res = Utils.readAnswer(di);
 		// TRANSFORMATION DE LA REPONSE SOUS FORME DE LISTE DE LETTER
-		System.out.println("je suis res" + res);
+		//System.out.println("je suis res" + res);
 		
 	}
 
@@ -132,8 +132,8 @@ public class Politicien {
 		
 		JSONObject json2 = new JSONObject();
 		json2.put("inject_word",json );
-		System.out.println("je VEUX VOIR CA" + json.toString());
-		System.out.println("je VEUX VOIR CArrrrrrrrrr" + json2.toString());
+		//System.out.println("je VEUX VOIR CA" + json.toString());
+		//System.out.println("je VEUX VOIR CArrrrrrrrrr" + json2.toString());
 
 		//String s1 = "{ \"inject_word\" : " + w.toString() + " }";
 		//System.out.println("je suis S1 " + s1);
@@ -141,7 +141,7 @@ public class Politicien {
 		//byte[] a = Utils.intToBigEndian(json2.toString().length());
 		byte[] a = Utils.intToBigEndian(json2.toString().length());
 		for (int i = a.length - 1; i >= 0; i--) {
-			System.out.println("what" + (char) (a[i]));
+			//System.out.println("what" + (char) (a[i]));
 			bw.write((char) (a[i]));
 		}
 		//System.out.println("inject word:" + w.getWord());
@@ -168,13 +168,13 @@ public class Politicien {
 	}
 	
 	public static String findWordDestinaire(ArrayList<String> dictionaire,Word wordAct) {
-		System.out.println(" po find   ----> wordAct = " + wordAct.getWord());
+		//System.out.println(" po find   ----> wordAct = " + wordAct.getWord());
 		ArrayList<Letter> letters = wordAct.getWord();
 		for(String s: dictionaire) {
 			int i = 0;
 			System.out.print(s);
 			if(s.length()<=letters.size()) {
-				System.out.println(" --> too short!!!");
+				//System.out.println(" --> too short!!!");
 				continue;
 			}else {
 				//there,we can chose the longest or the first accord or random--i chose first accord
@@ -183,7 +183,7 @@ public class Politicien {
 						i++;
 						continue;
 					}else {
-						System.out.println(" --> not match!!!");
+						//System.out.println(" --> not match!!!");
 						break;
 					}
 				}

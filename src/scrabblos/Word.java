@@ -68,12 +68,12 @@ public class Word {
 	public String toString() {
 	String wordArray ="[ ";
 	for(Letter l : this.word) {
-		System.out.println("je fais la bonne chose" + l.getLetter().toString());
+		//System.out.println("je fais la bonne chose" + l.getLetter().toString());
 		wordArray += l.toString();
 		wordArray+=", ";
 	}
 	wordArray = wordArray.substring(0, wordArray.length()-2) + " ]";
-	System.out.println("JE RENTRE ICIIII" + "{ \"word\" :" + wordArray + ", \"head\" : \""+this.head+ "\" ,\"politicien\" : \""+this.politicien + "\" , \"signature\" : "+this.signature);
+	//System.out.println("JE RENTRE ICIIII" + "{ \"word\" :" + wordArray + ", \"head\" : \""+this.head+ "\" ,\"politicien\" : \""+this.politicien + "\" , \"signature\" : "+this.signature);
 	return "{ \"word\":" + wordArray + ", \"head\":\""+this.head+ "\", \"politicien\":\""+this.politicien + "\", \"signature\":\""+this.signature+"\"}";
 			
 }

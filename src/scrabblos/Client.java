@@ -82,13 +82,13 @@ public class Client {
 		DataInputStream di = new DataInputStream(is);
 		JSONObject j = new JSONObject(Utils.readAnswer(di));
 		JSONArray alphabet = j.getJSONArray("letters_bag");
-		System.out.println(alphabet.toString());
+		//System.out.println(alphabet.toString());
 		ArrayList<String> letterbag = new ArrayList<String>();
 		for(int i = 0; i<alphabet.length();i++) {
 			letterbag.add(alphabet.getString(i));
 		}
 		//RECUPERATION DU SAC DE LETTRES
-		System.out.println(letterbag);
+		//System.out.println(letterbag);
 		return letterbag;
 	}
 	
@@ -119,14 +119,14 @@ public class Client {
 		String j = "{ \"inject_letter\": { \"letter\":\"a\", \"period\":0, \"head\":\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"author\":\"b7b597e0d64accdb6d8271328c75ad301c29829619f4865d31cc0c550046a08f\", \"signature\":\"8b6547447108e11c0092c95e460d70f367bc137d5f89c626642e1e5f2ce\" }}";
 		JSONObject json2 = new JSONObject();
 		json2.put("inject_letter", json);
-		System.out.println("taille" + json2.toString().length());
+		//System.out.println("taille" + json2.toString().length());
 		byte [] a =Utils.intToBigEndian(json2.toString().length());
-		System.out.println(a);
+		//System.out.println(a);
 		for(int i = a.length-1 ;i>=0 ;i--) {
 			System.out.println((char)(a[i]));
 			bw.write((char)(a[i]));
 		}
-		System.out.println(j);
+		//System.out.println(j);
 		bw.write(json2.toString());
 		bw.flush();
 	}
